@@ -6,6 +6,7 @@
     d1p1:Ignorable="d" 
     xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:WeddingGuestsManager.ViewModels"
+    xmlns:enums="clr-namespace:GuestsShared.Enums;assembly=GuestsShared"
     ShutdownMode="OnMainWindowClose"
     StartupUri="MainWindow.xaml">
     <!--Startup="App_OnStartup"-->
@@ -23,6 +24,11 @@
 
             <Color x:Key="Colour.WeddingGold">#edb71e</Color>
             <SolidColorBrush x:Key="Brush.Gold" Color="{StaticResource Colour.WeddingGold}"/>
+            <SolidColorBrush x:Key="Brush.Accepted" Color="Green"/>
+            <SolidColorBrush x:Key="Brush.PendingInvitation" Color="LightGreen"/>
+            <SolidColorBrush x:Key="Brush.PendingReply" Color="Orange"/>
+            <SolidColorBrush x:Key="Brush.Declined" Color="Red"/>
+
             <ControlTemplate x:Key="Control.PlusSign">
                 <Path
                     Width="14"
@@ -31,6 +37,29 @@
                     Fill="{DynamicResource GrayBrush1}"
                     Stretch="Fill" />
             </ControlTemplate>
+            <DataTemplate x:Key="DataTemplate.RsvpStatusText" DataType="{x:Type enums:RsvpOption}">
+                <Border Width="150">
+                    <Border.Style>
+                        <Style TargetType="{x:Type Border}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Mode=OneWay}" Value="Accepted">
+                                    <Setter Property="Background" Value="{StaticResource Brush.Accepted}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Mode=OneWay}" Value="Declined">
+                                    <Setter Property="Background" Value="{StaticResource Brush.Declined}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Mode=OneWay}" Value="PendingInvitation">
+                                    <Setter Property="Background" Value="{StaticResource Brush.PendingInvitation}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Mode=OneWay}" Value="PendingReply">
+                                    <Setter Property="Background" Value="{StaticResource Brush.PendingReply}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <TextBlock Text="{Binding}" HorizontalAlignment="Center"/>
+                </Border>
+            </DataTemplate>
 
             <Style x:Key="AccentCircleButtonStyle"
                    BasedOn="{StaticResource MahApps.Metro.Styles.MetroCircleButtonStyle}"
