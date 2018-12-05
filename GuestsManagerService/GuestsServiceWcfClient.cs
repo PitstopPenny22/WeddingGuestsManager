@@ -50,5 +50,10 @@ namespace GuestsManagerService
         {
             CallServiceClientSafely(channel => channel.AddNewGuest(newGuestModel), $"An error occurred whilst calling GuestsService to add a new guest for '{newGuestModel.FirstName} {newGuestModel.LastName}.");
         }
+
+        public void MarkHouseholdAsInvited(Guid householdId)
+        {
+            CallServiceClientSafely(channel => channel.MarkHouseholdAsInvited(householdId), $"An error occurred whilst calling GuestsService to mark househould with Id '{householdId} as invited.");
+        }
     }
 }

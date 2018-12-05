@@ -19,5 +19,6 @@ namespace GuestsManagerService.Interfaces
         bool UpdateSeatByGuestId(Guid id, int seatNumber);
 
         void AddNewGuest(GuestModel newGuestModel);
+        void MarkHouseholdAsInvited(Guid householdId);
     }
 }
