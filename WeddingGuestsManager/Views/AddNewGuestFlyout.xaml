@@ -1,0 +1,65 @@
+﻿<mah:Flyout 
+    x:Class="WeddingGuestsManager.Views.AddNewGuestFlyout"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:WeddingGuestsManager.Views"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:viewModels="clr-namespace:WeddingGuestsManager.ViewModels"
+    mc:Ignorable="d" 
+    d:DesignHeight="450"
+    d:DataContext="{d:DesignInstance viewModels:GuestsManagerViewModel, IsDesignTimeCreatable=False}"
+    Header="Add new Guest"
+    IsModal="True" 
+    Position="Left" 
+    IsOpen="{Binding IsAddNewGuestVisible, UpdateSourceTrigger=PropertyChanged}"
+    CloseButtonIsCancel="True" 
+    CloseCommand="{Binding HideAddNewGuestCommand}"
+    Theme="Light"
+    Width="400">
+    <Grid>
+        <mah:ProgressRing Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <DockPanel LastChildFill="True">
+            <Button DockPanel.Dock="Bottom" Style="{StaticResource MetroButton}" Command="{Binding AddNewGuestCommand}" Content="Add" Height="40"/>
+            <local:NewGuestDetailsView DockPanel.Dock="Top" DataContext="{Binding NewGuestViewModel}" />
+            <StackPanel Orientation="Vertical" Margin="0 10 0 0" Width="350">
+                <TextBlock Text="Household:" Style="{StaticResource MetroTextBlock}"/>
+                <ComboBox ItemsSource="{Binding AllHouseholds}" SelectedItem="{Binding NewGuestViewModel.SelectedHousehold}" Margin="0 5">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type viewModels:HouseholdViewModel}">
+                            <TextBlock Text="{Binding EmailAddress, Mode=OneWay}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBlock Style="{StaticResource MetroTextBlock}"><Run Text="Selected Household: "/>
+                    <Run FontWeight="Bold" Foreground="{StaticResource Brush.Gold}" FontSize="16">
+                        <Run.Style>
+                            <Style TargetType="{x:Type Run}">
+                                <Setter Property="Text" Value="{Binding NewGuestViewModel.SelectedHousehold.EmailAddress}"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding NewGuestViewModel.SelectedHousehold}" Value="{x:Null}">
+                                        <Setter Property="Text" Value="None selected"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Run.Style>
+                    </Run>
+                </TextBlock>
+                <TextBlock Text="Guests in selected household:" Style="{StaticResource MetroTextBlock}" Margin="0 10"/>
+                <ListBox Margin="5 0 0 0">
+                    <ListBox.Style>
+                        <Style TargetType="{x:Type ListBox}" BasedOn="{StaticResource MetroListBox}">
+                            <Setter Property="ItemsSource" Value="{Binding NewGuestViewModel.SelectedHousehold.GuestsInHousehold, Mode=OneWay}"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding NewGuestViewModel.SelectedHousehold, Mode=OneWay}" Value="{x:Null}">
+                                    <Setter Property="ItemsSource" Value="{x:Null}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.Style>
+                </ListBox>
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</mah:Flyout>

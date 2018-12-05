@@ -1,0 +1,95 @@
+﻿<mah:MetroWindow 
+    x:Class="WeddingGuestsManager.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:views="clr-namespace:WeddingGuestsManager.Views"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:viewModels="clr-namespace:WeddingGuestsManager.ViewModels"
+    mc:Ignorable="d"
+    Title="Chris and Dorielle - Wedding Guest Management"
+    Height="800" 
+    Width="1200"
+    DataContext="{Binding Source={StaticResource VMLocator}, Path=Main}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding InitCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <mah:MetroWindow.Flyouts>
+        <mah:FlyoutsControl>
+            <views:AddNewGuestFlyout DataContext="{Binding GuestsManager}"/>
+        </mah:FlyoutsControl>
+    </mah:MetroWindow.Flyouts>
+    <Grid Height="770">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <mah:ProgressRing Grid.ColumnSpan="3" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <StackPanel Grid.Column="0" Orientation="Vertical">
+            <!--Header-->
+            <Grid Margin="0 5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="All Guests" VerticalAlignment="Center" FontSize="20"/>
+                <Button
+                    Grid.Column="1" 
+                    Command="{Binding GuestsManager.ShowAddNewGuestCommand, Mode=OneWay}" 
+                    Style="{StaticResource AccentCircleButtonStyle}" 
+                    Width="30" 
+                    Margin="0 0 5 0"
+                    VerticalAlignment="Center"
+                    Height="30"
+                    ToolTip="Add new guest">
+                    <Control  Template="{StaticResource Control.PlusSign}"/>
+                </Button>
+            </Grid>
+            <!--All Guests ListBox-->
+            <ListBox 
+                ItemsSource="{Binding GuestsManager.AllHouseholds, Mode=OneWay}" 
+                AlternationCount="2" 
+                Style="{StaticResource MetroListBox}" 
+                Height="730">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource MetroListBoxItem}">
+                        <Style.Triggers>
+                            <Trigger Property="ListBox.AlternationIndex" Value="1">
+                                <Setter Property="Background" Value="{StaticResource GrayBrush10}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type viewModels:HouseholdViewModel}">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding EmailAddress,Mode=OneWay}" FontWeight="Bold" FontSize="14" Foreground="{StaticResource Brush.Gold}"/>
+                            <ItemsControl ItemsSource="{Binding GuestsInHousehold, Mode=OneWay}" HorizontalAlignment="Center" HorizontalContentAlignment="Center">
+                            </ItemsControl>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+        <GridSplitter Grid.Column="1"/>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="{Binding GuestsManager.AllGuests.Count, StringFormat={}Number of Guests: {0}}"/>
+            <Grid Grid.Row="1">
+                <Canvas Margin="150 0 0 0">
+                    <Rectangle Height="100" Width="600" Canvas.Top="150" StrokeThickness="3" Stroke="Black"></Rectangle>
+                    <Rectangle Height="100" Width="600" Canvas.Top="250" StrokeThickness="3" Stroke="Black"></Rectangle>
+                </Canvas>
+            </Grid>
+        </Grid>
+    </Grid>
+</mah:MetroWindow>
