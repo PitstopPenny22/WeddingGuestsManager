@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -58,6 +59,7 @@ namespace WeddingGuestsManager.ViewModels
         public ICommand AddNewGuestCommand { get; set; }
         public ICommand ShowAddNewGuestCommand { get; set; }
         public ICommand HideAddNewGuestCommand { get; set; }
+        public ICommand InviteHouseholdCommand { get; set; }
 
         #endregion
 
@@ -67,9 +69,11 @@ namespace WeddingGuestsManager.ViewModels
             AddNewGuestCommand = new RelayCommand(async() => await AddNewGuest());
             ShowAddNewGuestCommand = new RelayCommand(ShowAddNewGuest);
             HideAddNewGuestCommand = new RelayCommand(HideAddNewGuest);
+            InviteHouseholdCommand = new RelayCommand<HouseholdViewModel>(async (household) => await InviteHousehold(household), (household) => CanInviteHoushold(household));
+
             NewGuestViewModel = new GuestViewModel();
         }
-     
+
         private void ShowAddNewGuest()
         {
             IsAddNewGuestVisible = true;
@@ -125,6 +129,30 @@ namespace WeddingGuestsManager.ViewModels
                     }));
                 await LoadAllHouseholdsAndAllGuests();
                 HideAddNewGuestCommand.Execute(null);
+            });
+        }
+
+        private bool CanInviteHoushold(HouseholdViewModel household)
+        {
+            if (household == null)
+            {
+                return false;
+            }
+            return household.GuestsInHousehold.All(g => g.RsvpStatusId == GuestsShared.Enums.RsvpOption.PendingInvitation);
+        }
+        private async Task InviteHousehold(HouseholdViewModel householdViewModel)
+        {
+            await SetBusyWhilstDoingAction(async () =>
+            {
+                await Task.Run(() =>
+                {
+                    _guestsServiceClient.MarkHouseholdAsInvited(householdViewModel.HouseholdId);
+                   
+                });
+                foreach (var guest in householdViewModel.GuestsInHousehold)
+                {
+                    guest.RsvpStatusId = GuestsShared.Enums.RsvpOption.PendingReply;
+                }
             });
         }
     }

@@ -80,12 +80,18 @@
     <Compile Include="ViewModels\GuestViewModel.cs" />
     <Compile Include="ViewModels\HouseholdViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\SeatViewModel.cs" />
-    <Compile Include="ViewModels\TablePlannerViewModel.cs" />
+    <Compile Include="ViewModels\SeatPlan\SeatViewModel.cs" />
+    <Compile Include="ViewModels\SeatPlan\TablePlannerViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="Views\AddNewGuestFlyout.xaml.cs">
       <DependentUpon>AddNewGuestFlyout.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GuestDetailView.xaml.cs">
+      <DependentUpon>GuestDetailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HouseholdDetailView.xaml.cs">
+      <DependentUpon>HouseholdDetailView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NewGuestDetailsView.xaml.cs">
       <DependentUpon>NewGuestDetailsView.xaml</DependentUpon>
@@ -106,6 +112,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\AddNewGuestFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GuestDetailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HouseholdDetailView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,0 +1,21 @@
+﻿<UserControl 
+    x:Class="WeddingGuestsManager.Views.GuestDetailView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:WeddingGuestsManager.Views"
+    xmlns:viewModels="clr-namespace:WeddingGuestsManager.ViewModels"
+    mc:Ignorable="d" 
+    d:DesignHeight="200" 
+    d:DesignWidth="200"
+    d:DataContext="{d:DesignInstance viewModels:GuestViewModel, IsDesignTimeCreatable=False}">
+    <StackPanel Orientation="Vertical">
+        <TextBlock Text="{Binding Mode=OneWay}"/>
+        <Grid>
+            <TextBlock Text="Seat Number:" HorizontalAlignment="Left"/>
+            <TextBox Text="{Binding SeatNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" MinWidth="50"/>
+        </Grid>
+        
+    </StackPanel>
+</UserControl>

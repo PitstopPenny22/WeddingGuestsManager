@@ -1,7 +1,7 @@
-﻿using System;
+﻿using GuestsShared.Models;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using GuestsShared.Models;
 
 namespace WeddingGuestsManager.ViewModels
 {

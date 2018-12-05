@@ -1,4 +1,5 @@
-﻿using GuestsShared.Enums;
+﻿using System;
+using GuestsShared.Enums;
 using GuestsShared.Models;
 
 namespace WeddingGuestsManager.ViewModels
@@ -11,11 +12,14 @@ namespace WeddingGuestsManager.ViewModels
         private string _lastName;
         private bool _isChild;
         private HouseholdViewModel _selectedHousehold;
+        private RsvpOption _rsvpStatusId;
+        private int? _seatNumber;
 
         #endregion
 
         #region Properties
 
+        public Guid Id { get; }
         public string FirstName
         {
             get => _firstName;
@@ -23,7 +27,7 @@ namespace WeddingGuestsManager.ViewModels
             {
                 _firstName = value;
                 OnPropertyChanged();
-            } 
+            }
         }
         public string LastName
         {
@@ -41,14 +45,30 @@ namespace WeddingGuestsManager.ViewModels
             {
                 _isChild = value;
                 OnPropertyChanged();
-            } 
+            }
         }
-        public int? SeatNumber { get; set; }
-        public int RsvpStatusId { get; set; }
-        public string DietaryRequirements { get; set; }
-        public string SongRequest { get; set; }
-        public bool NeedsTransport { get; set; }
-        public HotelRequirement HotelRequirement { get; set; }
+        public int? SeatNumber
+        {
+            get => _seatNumber;
+            set
+            {
+                _seatNumber = value;
+                OnPropertyChanged();
+            }
+        }
+        public RsvpOption RsvpStatusId
+        {
+            get => _rsvpStatusId;
+            set
+            {
+                _rsvpStatusId = value;
+                OnPropertyChanged();
+            }
+        }
+        public string DietaryRequirements { get; }
+        public string SongRequest { get; }
+        public bool NeedsTransport { get; }
+        public HotelRequirement HotelRequirement { get; }
         public HouseholdViewModel SelectedHousehold
         {
             get => _selectedHousehold;
@@ -67,16 +87,22 @@ namespace WeddingGuestsManager.ViewModels
             {
                 return;
             }
+            Id = guestModel.Id;
             FirstName = guestModel.FirstName;
             LastName = guestModel.LastName;
             IsChild = guestModel.IsChild;
-            
+            SeatNumber = guestModel.SeatNumber;
+            RsvpStatusId = (RsvpOption)guestModel.RsvpStatusId;
+            DietaryRequirements = guestModel.DietaryRequirements;
+            SongRequest = guestModel.SongRequest;
+            NeedsTransport = guestModel.NeedsTransport;
+            HotelRequirement = guestModel.HotelRequirement;
             SelectedHousehold = householdViewModel;
         }
 
         public override string ToString()
         {
-            return FirstName + " " + LastName + (IsChild ? "(child)" : string.Empty);
+            return FirstName + " " + LastName + (IsChild ? " (child)" : string.Empty);
         }
     }
 }
