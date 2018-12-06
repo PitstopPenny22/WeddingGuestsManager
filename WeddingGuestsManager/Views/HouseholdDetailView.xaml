@@ -27,7 +27,6 @@
         <local:GuestDetailView
             Grid.Column="1"
             Grid.Row="1"
-            Width="200"
             HorizontalAlignment="Left"
             DataContext="{Binding ElementName=GuestsInHouseholdListBox, Path=SelectedItem, Mode=OneWay}">
             <local:GuestDetailView.Style>
