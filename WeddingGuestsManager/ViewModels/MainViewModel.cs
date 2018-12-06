@@ -2,6 +2,7 @@
 using GuestsManagerService.Interfaces;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WeddingGuestsManager.ViewModels.SeatPlan;
 
 namespace WeddingGuestsManager.ViewModels
 {
