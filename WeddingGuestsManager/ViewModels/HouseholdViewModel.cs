@@ -9,6 +9,7 @@ namespace WeddingGuestsManager.ViewModels
     {
         internal Guid HouseholdId { get; private set; }
         private ObservableCollection<GuestViewModel> _guestsInHousehold;
+        private string _rsvpUrl;
 
         public string EmailAddress { get; set; }
         public ObservableCollection<GuestViewModel> GuestsInHousehold
@@ -18,7 +19,16 @@ namespace WeddingGuestsManager.ViewModels
             {
                 _guestsInHousehold = value;
                 OnPropertyChanged();
-            } 
+            }
+        }
+        public string RsvpUrl
+        {
+            get => _rsvpUrl;
+            set
+            {
+                _rsvpUrl = value;
+                OnPropertyChanged();
+            }
         }
 
         public HouseholdViewModel(HouseholdModel household)
@@ -31,6 +41,7 @@ namespace WeddingGuestsManager.ViewModels
                     .OrderBy(g => g.FirstName)
                     .ThenBy(g => g.LastName)
                     .ToList());
+            RsvpUrl = "https://rsvpchrisdorielle.azurewebsites.net/" + HouseholdId;
         }
     }
 }

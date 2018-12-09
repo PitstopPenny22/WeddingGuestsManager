@@ -7,33 +7,44 @@
     xmlns:viewModels="clr-namespace:WeddingGuestsManager.ViewModels"
     mc:Ignorable="d" 
     d:DesignHeight="200" 
-    Width="300"
+    Width="500"
     d:DataContext="{d:DesignInstance viewModels:GuestViewModel, IsDesignTimeCreatable=False}">
-    <StackPanel Orientation="Vertical">
-        <StackPanel.Resources>
-            <Style TargetType="{x:Type TextBlock}" x:Key="TextBlock.Display">
-                <Setter Property="Foreground" Value="{StaticResource Brush.Gold}"/>
-                <Setter Property="FontWeight" Value="Bold"/>
-                <Setter Property="Margin" Value="0 0 0 5"/>
-            </Style>
-        </StackPanel.Resources>
-        <TextBlock Text="{Binding Mode=OneWay}" Style="{StaticResource TextBlock.Display}"/>
-        
-        <StackPanel Orientation="Horizontal" Margin="0 5">
-            <TextBlock Text="Seat Number:" VerticalAlignment="Center"/>
-            <TextBox Text="{Binding SeatNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  MinWidth="50" Margin="10 0 0 0"/>
+    <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" CanContentScroll="True" PanningMode="VerticalOnly">
+        <StackPanel Orientation="Vertical" VerticalAlignment="Top" MaxHeight="200">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type TextBlock}" x:Key="TextBlock.Display">
+                    <Setter Property="Foreground" Value="{StaticResource Brush.Gold}"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="Margin" Value="0 0 0 5"/>
+                </Style>
+                <Style TargetType="{x:Type TextBox}" x:Key="TextBox.Display">
+                    <Setter Property="Foreground" Value="{StaticResource Brush.Gold}"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="Margin" Value="0 0 0 5"/>
+                    <Setter Property="IsReadOnly" Value="True"/>
+                    <Setter Property="TextWrapping" Value="Wrap"/>
+                    <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+                    <Setter Property="MaxHeight" Value="70"/>
+                </Style>
+            </StackPanel.Resources>
+            <TextBlock Text="{Binding Mode=OneWay}" Style="{StaticResource TextBlock.Display}"/>
+
+            <StackPanel Orientation="Horizontal" Margin="0 5">
+                <TextBlock Text="Seat Number:" VerticalAlignment="Center"/>
+                <TextBox Text="{Binding SeatNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  MinWidth="50" Margin="10 0 0 0"/>
+            </StackPanel>
+
+            <TextBlock Text="Dietary Requirements:"/>
+            <TextBox Text="{Binding DietaryRequirements, Mode=OneWay}" Style="{StaticResource TextBox.Display}"/>
+
+            <TextBlock Text="Song Request:"/>
+            <TextBox Text="{Binding SongRequest, Mode=OneWay}" Style="{StaticResource TextBox.Display}"/>
+
+            <TextBlock Text="Hotel Accommodation:"/>
+            <TextBlock Text="{Binding HotelRequirement, Mode=OneWay}" Style="{StaticResource TextBlock.Display}"/>
+
+            <TextBlock Text="Transport Requirement:"/>
+            <TextBlock Text="{Binding NeedsTransport, Mode=OneWay}" Style="{StaticResource TextBlock.Display}"/>
         </StackPanel>
-        
-        <TextBlock Text="Dietary Requirements:"/>
-        <TextBlock Text="{Binding DietaryRequirements, Mode=OneWay}" Style="{StaticResource TextBlock.Display}"/>
-
-        <TextBlock Text="Song Request:"/>
-        <TextBlock Text="{Binding SongRequest, Mode=OneWay}" Style="{StaticResource TextBlock.Display}"/>
-
-        <TextBlock Text="Hotel Accommodation:"/>
-        <TextBlock Text="{Binding HotelRequirement, Mode=OneWay}" Style="{StaticResource TextBlock.Display}"/>
-
-        <TextBlock Text="Transport Requirement:"/>
-        <TextBlock Text="{Binding NeedsTransport, Mode=OneWay}" Style="{StaticResource TextBlock.Display}"/>
-    </StackPanel>
+    </ScrollViewer>
 </UserControl>
