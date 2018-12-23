@@ -27,7 +27,7 @@
             <TextBlock Text="Household: "/>
             <TextBox Grid.Column="1" Text="{Binding EmailAddress, Mode=OneWay}" Foreground="{StaticResource Brush.Gold}" FontWeight="Bold" IsReadOnly="True"/>
         </Grid>
-       
+
         <ListBox Name="GuestsInHouseholdListBox" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding GuestsInHousehold, Mode=OneWay}" MaxHeight="150" VerticalAlignment="Top" Width="300"/>
         <local:GuestDetailView
             Grid.Column="1"
