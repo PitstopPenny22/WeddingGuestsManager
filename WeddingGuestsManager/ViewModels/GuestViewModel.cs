@@ -12,7 +12,7 @@ namespace WeddingGuestsManager.ViewModels
         private string _lastName;
         private bool _isChild;
         private HouseholdViewModel _selectedHousehold;
-        private RsvpOption _rsvpStatusId;
+        private RsvpOption _rsvpStatus;
         private int? _seatNumber;
 
         #endregion
@@ -56,12 +56,12 @@ namespace WeddingGuestsManager.ViewModels
                 OnPropertyChanged();
             }
         }
-        public RsvpOption RsvpStatusId
+        public RsvpOption RsvpStatus
         {
-            get => _rsvpStatusId;
+            get => _rsvpStatus;
             set
             {
-                _rsvpStatusId = value;
+                _rsvpStatus = value;
                 OnPropertyChanged();
             }
         }
@@ -92,7 +92,7 @@ namespace WeddingGuestsManager.ViewModels
             LastName = guestModel.LastName;
             IsChild = guestModel.IsChild;
             SeatNumber = guestModel.SeatNumber;
-            RsvpStatusId = (RsvpOption)guestModel.RsvpStatusId;
+            RsvpStatus = (RsvpOption)guestModel.RsvpStatusId;
             DietaryRequirements = guestModel.DietaryRequirements;
             SongRequest = guestModel.SongRequest;
             NeedsTransport = guestModel.NeedsTransport;

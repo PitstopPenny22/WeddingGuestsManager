@@ -7,6 +7,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using GuestsManagerService.Interfaces;
 using GuestsShared.Models;
+using WeddingGuestsManager.ViewModels.Utils;
 
 namespace WeddingGuestsManager.ViewModels
 {
@@ -44,7 +45,22 @@ namespace WeddingGuestsManager.ViewModels
             {
                 _allGuests = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(NumberOfGuestsWhoAccepted));
+                OnPropertyChanged(nameof(NumberOfGuestsWhoDeclined));
+                OnPropertyChanged(nameof(NumberOfGuestsStillToReply));
             } 
+        }
+        public int NumberOfGuestsWhoAccepted
+        {
+            get => _allGuests != null ? _allGuests.Count(g => g.RsvpStatus == GuestsShared.Enums.RsvpOption.Accepted) : 0;
+        }
+        public int NumberOfGuestsWhoDeclined
+        {
+            get => _allGuests != null ? _allGuests.Count(g => g.RsvpStatus == GuestsShared.Enums.RsvpOption.Declined) : 0;
+        }
+        public int NumberOfGuestsStillToReply
+        {
+            get => _allGuests != null ? _allGuests.Count(g => g.RsvpStatus == GuestsShared.Enums.RsvpOption.PendingReply) : 0;
         }
         public ObservableCollection<HouseholdViewModel> AllHouseholds
         {
@@ -61,6 +77,12 @@ namespace WeddingGuestsManager.ViewModels
         public ICommand HideAddNewGuestCommand { get; set; }
         public ICommand InviteHouseholdCommand { get; set; }
 
+        public ICommand GetDietaryRequirementsCommand { get; private set; }
+        public ICommand GetSongRequestsCommand { get; private set; }
+        public ICommand GetTransportRequirementCommand { get; private set; }
+        public ICommand GetHotelRequirementCommand { get; private set; }
+        public ICommand GetFullReportCommand { get; private set; }
+
         #endregion
 
         public GuestsManagerViewModel(IGuestsServiceWcfClient guestsServiceClient)
@@ -72,6 +94,12 @@ namespace WeddingGuestsManager.ViewModels
             InviteHouseholdCommand = new RelayCommand<HouseholdViewModel>(async (household) => await InviteHousehold(household), (household) => CanInviteHoushold(household));
 
             NewGuestViewModel = new GuestViewModel();
+
+            GetDietaryRequirementsCommand = new RelayCommand(async () => await GenerateDietaryRequirementsReport());
+            GetSongRequestsCommand = new RelayCommand(async () => await GenerateSongRequestsReport());
+            GetTransportRequirementCommand = new RelayCommand(async () => await GenerateTransportRequirementReport());
+            GetHotelRequirementCommand = new RelayCommand(async () => await GenerateHotelRequirementReport());
+            GetFullReportCommand = new RelayCommand(async () => await GenerateFullReport());
         }
 
         private void ShowAddNewGuest()
@@ -138,7 +166,7 @@ namespace WeddingGuestsManager.ViewModels
             {
                 return false;
             }
-            return household.GuestsInHousehold.All(g => g.RsvpStatusId == GuestsShared.Enums.RsvpOption.PendingInvitation);
+            return household.GuestsInHousehold.All(g => g.RsvpStatus == GuestsShared.Enums.RsvpOption.PendingInvitation);
         }
         private async Task InviteHousehold(HouseholdViewModel householdViewModel)
         {
@@ -151,9 +179,30 @@ namespace WeddingGuestsManager.ViewModels
                 });
                 foreach (var guest in householdViewModel.GuestsInHousehold)
                 {
-                    guest.RsvpStatusId = GuestsShared.Enums.RsvpOption.PendingReply;
+                    guest.RsvpStatus = GuestsShared.Enums.RsvpOption.PendingReply;
                 }
             });
+        }
+
+        private async Task GenerateDietaryRequirementsReport()
+        {
+            await ReportBuilder.GenerateDietaryRequirementsReport(AllGuests);
+        }
+        private async Task GenerateSongRequestsReport()
+        {
+            await ReportBuilder.GenerateSongRequirementsReport(AllGuests);
+        }
+        private async Task GenerateTransportRequirementReport()
+        {
+            await ReportBuilder.GenerateTransportRequirementReport(AllGuests);
+        }
+        private async Task GenerateHotelRequirementReport()
+        {
+            await ReportBuilder.GenerateHotelRequirementReport(AllGuests);
+        }
+        private async Task GenerateFullReport()
+        {
+            await ReportBuilder.GenerateFullReport(AllGuests);
         }
     }
 }

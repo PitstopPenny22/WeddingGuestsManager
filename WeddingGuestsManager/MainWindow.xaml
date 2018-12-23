@@ -11,8 +11,8 @@
     xmlns:seatPlanViewModels="clr-namespace:WeddingGuestsManager.ViewModels.SeatPlan"
     mc:Ignorable="d"
     Title="Chris and Dorielle - Wedding Guest Management"
-    Height="800" 
-    Width="1400"
+    MinHeight="800" 
+    MinWidth="1400"
     DataContext="{Binding Source={StaticResource VMLocator}, Path=Main}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -24,14 +24,18 @@
             <views:AddNewGuestFlyout DataContext="{Binding GuestsManager}"/>
         </mah:FlyoutsControl>
     </mah:MetroWindow.Flyouts>
-    <Grid Height="770">
+    <Grid MinHeight="770">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
         <mah:ProgressRing Grid.ColumnSpan="3" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-        <StackPanel Grid.Column="0" Orientation="Vertical">
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
             <!--Header-->
             <Grid Margin="0 5">
                 <Grid.ColumnDefinitions>
@@ -53,11 +57,11 @@
             </Grid>
             <!--All Guests ListBox-->
             <ListBox 
+                Grid.Row="1"
                 Name="AllGuestsListBox"
                 ItemsSource="{Binding GuestsManager.AllHouseholds, Mode=OneWay}" 
                 AlternationCount="2" 
-                Style="{StaticResource MetroListBox}" 
-                Height="730">
+                Style="{StaticResource MetroListBox}">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource MetroListBoxItem}">
                         <Style.Triggers>
@@ -76,7 +80,7 @@
                                     <DataTemplate DataType="{x:Type viewModels:GuestViewModel}">
                                         <Grid HorizontalAlignment="Stretch">
                                             <TextBlock Text="{Binding Path=., Mode=OneWay}" HorizontalAlignment="Left"/>
-                                            <ContentControl Content="{Binding RsvpStatusId, Mode=OneWay}" HorizontalAlignment="Right" ContentTemplate="{StaticResource DataTemplate.RsvpStatusText}"/>
+                                            <ContentControl Content="{Binding RsvpStatus, Mode=OneWay}" HorizontalAlignment="Right" ContentTemplate="{StaticResource DataTemplate.RsvpStatusText}"/>
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
@@ -85,7 +89,7 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        </StackPanel>
+        </Grid>
         <GridSplitter Grid.Column="1"/>
         <!--Table Planner and guest details-->
         <Grid Grid.Column="2">
@@ -95,9 +99,22 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="{Binding GuestsManager.AllGuests.Count, StringFormat={}Number of Guests: {0}}"/>
-            <Grid Grid.Row="1" Height="450">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding GuestsManager.AllGuests.Count, StringFormat={}Number of Guests: {0}}"/>
+                <TextBlock Text="{Binding GuestsManager.NumberOfGuestsWhoAccepted, StringFormat={}Number of Accepted: {0}}" Margin="5 0"/>
+                <TextBlock Text="{Binding GuestsManager.NumberOfGuestsWhoDeclined, StringFormat={}Number of Declined: {0}}" Margin="5 0"/>
+                <TextBlock Text="{Binding GuestsManager.NumberOfGuestsStillToReply, StringFormat={}Still to reply: {0}}" Margin="5 0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="1">
+                <Button Command="{Binding GuestsManager.GetDietaryRequirementsCommand, Mode=OneWay}">Dietary Requirements Report</Button>
+                <Button Command="{Binding GuestsManager.GetSongRequestsCommand, Mode=OneWay}">Song Requests Report</Button>
+                <Button Command="{Binding GuestsManager.GetTransportRequirementCommand, Mode=OneWay}">Transport Requirement Report</Button>
+                <Button Command="{Binding GuestsManager.GetHotelRequirementCommand, Mode=OneWay}">Hotel Requirement Report</Button>
+                <Button Command="{Binding GuestsManager.GetFullReportCommand, Mode=OneWay}">Full Report</Button>
+            </StackPanel>
+            <Grid Grid.Row="2" Height="450">
                 <ItemsControl ItemsSource="{Binding TablePlanner.Tables}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -137,9 +154,9 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </Grid>
-            <TextBox Grid.Row="2" IsReadOnly="True" Text="{Binding ElementName=AllGuestsListBox, Path=SelectedItem.RsvpUrl, Mode=OneWay}"/>
+            <TextBox Grid.Row="3" IsReadOnly="True" Text="{Binding ElementName=AllGuestsListBox, Path=SelectedItem.RsvpUrl, Mode=OneWay}"/>
             <Button 
-                Grid.Row="3" 
+                Grid.Row="4" 
                 Command="{Binding GuestsManager.InviteHouseholdCommand}"
                 CommandParameter="{Binding ElementName=AllGuestsListBox, Path=SelectedItem}" 
                 Content="Mark as Invited">
@@ -154,7 +171,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <views:HouseholdDetailView Grid.Row="4" DataContext="{Binding ElementName=AllGuestsListBox, Path=SelectedItem, Mode=OneWay}">
+            <views:HouseholdDetailView Grid.Row="5" DataContext="{Binding ElementName=AllGuestsListBox, Path=SelectedItem, Mode=OneWay}">
                 <views:HouseholdDetailView.Style>
                     <Style TargetType="{x:Type views:HouseholdDetailView}">
                         <Setter Property="Visibility" Value="Visible"/>

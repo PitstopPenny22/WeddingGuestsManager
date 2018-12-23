@@ -83,6 +83,7 @@
     <Compile Include="ViewModels\SeatPlan\SeatViewModel.cs" />
     <Compile Include="ViewModels\SeatPlan\TablePlannerViewModel.cs" />
     <Compile Include="ViewModels\SeatPlan\TableViewModel.cs" />
+    <Compile Include="ViewModels\Utils\ReportBuilder.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="Views\AddNewGuestFlyout.xaml.cs">
